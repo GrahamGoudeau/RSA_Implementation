@@ -24,7 +24,7 @@ def main():
 		if len(sys.argv) != 3:
 			print_usage()
 		elif int(sys.argv[2]) % 8 != 0:
-			print("Prime bit length must be 0 (mod 8)")	
+			print("Prime bit length must be 0 (mod 8)")
 		else:
 			bit_len = int(sys.argv[2])
 			N, e, d = key_gen.key_gen(bit_len / 8)

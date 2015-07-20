@@ -8,6 +8,7 @@ OPT_KEY_LEN_BYTES = OPT_KEY_LEN_BITS / 8
 
 # generate a number representable in 'byte_len' number of bytes
 def number_gen(byte_len):
+	# suitable for cryptographic use according to https://docs.python.org/2/library/os.html#os.urandom
 	byte_arr = os.urandom(byte_len)
 	bit_string = ""
 	for byte in byte_arr:
