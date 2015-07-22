@@ -15,7 +15,7 @@ def xgcd(a,b):
 
 # returns (N - the modulus, e - public exponent, d - secret exponent)
 def key_gen(byte_len):
-	print "Generating " + str(byte_len * 8) + "-bit primes"
+	print "Generating " + str(byte_len * 8) + "-bit primes p and q"
 	p = prime_gen.prime_gen(byte_len)
 	q = prime_gen.prime_gen(byte_len)
 
