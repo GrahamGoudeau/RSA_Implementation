@@ -3,6 +3,7 @@ import os
 import fractions
 import sys
 import key_gen
+import encrypt
 import math
 
 args = ['-k', '-e', '-d']
@@ -112,8 +113,8 @@ def main():
     elif sys.argv[1] == '-k':
         if len(sys.argv) != 3:
             print_usage()
-        elif not is_power_of_two(int(sys.argv[2])) or int(sys.argv[2]) < 16:
-            print("Modulus bit length must be power of two, 2^k with k > 3")
+        elif not is_power_of_two(int(sys.argv[2])) or int(sys.argv[2]) < pow(2,7):
+            print("Modulus bit length must be power of two, 2^k with k > 6")
         else:
             bit_len = int(sys.argv[2])
             # bit_len / (# bits in a byte * 2 (each key half the total length))
