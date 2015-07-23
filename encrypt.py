@@ -64,6 +64,21 @@ def encrypt(N, e, filename):
         for byte in output_bytes:
             print(chr(int(byte, base=2)), end="")
 
+def print_valid_bytes(m, N_bin_len):
+    m_bin = bin(m)[2:].zfill(N_bin_len)
+
+    m_bytes = [m_bin[i:i + 8] for i in range(0, N_bin_len, 8)]
+    if not int(m_bytes[0], base=2) == 0 or not int(m_bytes[1], base=2) == 2:
+        #print("MALFORMED BLOCK")
+        return
+    zero_blocks_seen = 0
+    for byte in m_bytes:
+        if int(byte) == 0:
+            zero_blocks_seen += 1
+
+        if zero_blocks_seen == 2:
+            print(chr(int(byte, base=2)), end="")
+
 def decrypt(N, d, filename):
     with open(filename, 'rb') as input_file:
         N_bin_len = len(bin(N)[2:])
@@ -88,12 +103,7 @@ def decrypt(N, d, filename):
         for index,block in enumerate(int_data_array):
             m = pow(block, d, N)
             #print(bin(m)[2:].zfill(N_bin_len))
-            m_bin = bin(m)[2:].zfill(N_bin_len)
-
-            m_bytes = [m_bin[i:i + 8] for i in range(0, N_bin_len, 8)]
-            seen_leading_zero = False
-            seen_two_block = False
-            seen_final_zero = False
+            print_valid_bytes(m, N_bin_len)
             '''
             for byte in m_bytes:
                 if byte == 0 and not seen_leading_zero:
@@ -103,7 +113,6 @@ def decrypt(N, d, filename):
                     seen_final_zero = True
                     continue
                 if byte == 0 and s
-            '''
 
             print("="*30)
             print(m_bytes)
@@ -112,9 +121,10 @@ def decrypt(N, d, filename):
             print(int_data_array[index])
             print(index)
             #print(hex(m)[2:])
+            '''
 
-        print(len(data_array))
-        print(file_len_bytes)
+        #print(len(data_array))
+        #print(file_len_bytes)
 
 if __name__ == "__main__":
     #print("N, e/d, filename, option")
