@@ -69,15 +69,16 @@ def print_valid_bytes(m, N_bin_len):
 
     m_bytes = [m_bin[i:i + 8] for i in range(0, N_bin_len, 8)]
     if not int(m_bytes[0], base=2) == 0 or not int(m_bytes[1], base=2) == 2:
-        #print("MALFORMED BLOCK")
+        print("MALFORMED BLOCK")
         return
     zero_blocks_seen = 0
     for byte in m_bytes:
+        if zero_blocks_seen >= 2:
+            print(chr(int(byte, base=2)), end="")
+
         if int(byte) == 0:
             zero_blocks_seen += 1
 
-        if zero_blocks_seen == 2:
-            print(chr(int(byte, base=2)), end="")
 
 def decrypt(N, d, filename):
     with open(filename, 'rb') as input_file:
