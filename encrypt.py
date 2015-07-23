@@ -20,8 +20,7 @@ def generate_PS(length):
 # use PKCS#1v1.5 encryption scheme to increase safety
 def encrypt(N, e, filename):
     with open(filename, 'rb') as input_file:
-        print(N)
-        x = raw_input("N above")
+        N_bin_len = len(bin(N)[2:])
         contents = input_file.read()
         file_len_bytes = len(contents)
 
@@ -38,26 +37,92 @@ def encrypt(N, e, filename):
         # http://stackoverflow.com/questions/6372228/how-to-parse-a-list-or-string-into-chucks-of-fixed-length
         data_array = [contents[i:i + D] for i in range(0, file_len_bytes, D)]
         encrypted_binary_stream = ''
+        #encrypted_binary_stream_len = 0
         for m in data_array:
             m_len = len(m)
             PS_len = k - m_len - 3
+
+            # get the random filler content
             PS = generate_PS(PS_len)
+
+            # build the actual chunk to be encrypted
             EB = '\0' + chr(2) + PS + '\0' + m
             bin_string = ''
-            for c in EB:
-                bin_string += bin(ord(c))[2:].zfill(8)
+            for EB_byte in EB:
+                # add each byte of EB to the binary string
+                new_bits = bin(ord(EB_byte))[2:].zfill(8)
+                bin_string += new_bits
+                # isn't this always 8?
+                #encrypted_binary_stream_len += len(new_bits)
 
             m_integer = int(bin_string, base=2)
             c = pow(m_integer, e, N)
-            print(hex(c)[2:])
-            print(hex(N)[2:])
+            encrypted_binary_stream += bin(c)[2:].zfill(N_bin_len)
 
-        
+        encrypted_binary_stream_len = len(encrypted_binary_stream)
+        output_bytes = [encrypted_binary_stream[i:i + 8] for i in range(0, encrypted_binary_stream_len, 8)]
+        for byte in output_bytes:
+            print(chr(int(byte, base=2)), end="")
+
+def decrypt(N, d, filename):
+    with open(filename, 'rb') as input_file:
+        N_bin_len = len(bin(N)[2:])
+        contents = input_file.read()
+        file_len_bytes = len(contents)
+
+        # k = |N| bytes
+        k = int(math.floor(math.log(float(N), 16)) + 1) / 2
+
+        # break the data into k sized blocks to be decrypted
+        data_array = [contents[i:i + k] for i in range(0, file_len_bytes, k)]
+        int_data_array = []
+        for block in data_array:
+            binary_string = ''
+            for byte in block:
+                binary_string += bin(ord(byte))[2:].zfill(8)
+
+            int_data_array.append(int(binary_string, base=2))
+
+        #print(int_data_array)
+        # decrypt each integer in the int data array
+        for index,block in enumerate(int_data_array):
+            m = pow(block, d, N)
+            #print(bin(m)[2:].zfill(N_bin_len))
+            m_bin = bin(m)[2:].zfill(N_bin_len)
+
+            m_bytes = [m_bin[i:i + 8] for i in range(0, N_bin_len, 8)]
+            seen_leading_zero = False
+            seen_two_block = False
+            seen_final_zero = False
+            '''
+            for byte in m_bytes:
+                if byte == 0 and not seen_leading_zero:
+                    seen_leading_zero = True
+                    continue
+                if byte == 0 and seen_two_block and seen_leading_zero:
+                    seen_final_zero = True
+                    continue
+                if byte == 0 and s
+            '''
+
+            print("="*30)
+            print(m_bytes)
+            print(block)
+            print(bin(m)[2:].zfill(N_bin_len))
+            print(int_data_array[index])
+            print(index)
+            #print(hex(m)[2:])
+
+        print(len(data_array))
+        print(file_len_bytes)
+
 if __name__ == "__main__":
+    #print("N, e/d, filename, option")
     N = int(sys.argv[1], base=16)
-    print("N:", int(sys.argv[1], 16))
-    e = int(sys.argv[2])
-    print("e:", sys.argv[2])
+    #print("N:", int(sys.argv[1], 16))
+    e = int(sys.argv[2], base=16)
+    #print("e:", sys.argv[2])
     filename = sys.argv[3]
-    print("filename:", sys.argv[3])
-    encrypt(N, e, filename)
+    #print("filename:", sys.argv[3])
+    if sys.argv[4] == '-e': encrypt(N, e, filename)
+    if sys.argv[4] == '-d': decrypt(N, e, filename)
