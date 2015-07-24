@@ -19,7 +19,6 @@ def print_usage():
     print ("[-d] [stuff]")
 
 def print_key(N, e, d, bit_len):
-    print("\n", end="")
     print("="*40)
     print("N = p*q (where p,q are each " + str(bit_len / 2) + " bit-" +
         "primes) and N is " + str(bit_len) + " bits: ")

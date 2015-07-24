@@ -69,10 +69,12 @@ def print_valid_bytes(m, N_bin_len):
 
     m_bytes = [m_bin[i:i + 8] for i in range(0, N_bin_len, 8)]
     if not int(m_bytes[0], base=2) == 0 or not int(m_bytes[1], base=2) == 2:
-        print("MALFORMED BLOCK")
-        return
+        raise ValueError("MALFORMED BLOCK - MUST CONFORM TO PKCS#1 v1.5 ENCODING SCHEME")
+
+    # PKCS scheme: 0x00 | 0x02 | [random nonzero bytes] | 0x00 | data
     zero_blocks_seen = 0
     for byte in m_bytes:
+        # if we have seen both the indicated zero blocks
         if zero_blocks_seen >= 2:
             print(chr(int(byte, base=2)), end="")
 
@@ -105,27 +107,6 @@ def decrypt(N, d, filename):
             m = pow(block, d, N)
             #print(bin(m)[2:].zfill(N_bin_len))
             print_valid_bytes(m, N_bin_len)
-            '''
-            for byte in m_bytes:
-                if byte == 0 and not seen_leading_zero:
-                    seen_leading_zero = True
-                    continue
-                if byte == 0 and seen_two_block and seen_leading_zero:
-                    seen_final_zero = True
-                    continue
-                if byte == 0 and s
-
-            print("="*30)
-            print(m_bytes)
-            print(block)
-            print(bin(m)[2:].zfill(N_bin_len))
-            print(int_data_array[index])
-            print(index)
-            #print(hex(m)[2:])
-            '''
-
-        #print(len(data_array))
-        #print(file_len_bytes)
 
 if __name__ == "__main__":
     #print("N, e/d, filename, option")
