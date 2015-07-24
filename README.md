@@ -29,7 +29,7 @@ Say we have some sensitive data in a file called `secret_battle_plans.txt`.  Usi
 
 where `N` and `e` must both be in hex format.  Encrypted bytes will be printed to `stdout`.  The plaintext is encoded using [PKCS #1 v1.5](https://tools.ietf.org/html/rfc2437#section-9) before applying the RSA algorithm to it.
 
-A concrete exmaple, using the key we generated above:
+A concrete example, using the key we generated above:
 ```
 ~/Documents/RSA_Implementation > python rsa.py -e ed6e5c6f3a6ba17c0df39421bca3753b0c347ac3f676a414bbf0ae523198d561 10001 secret_battle_plans.txt > encrypted_battle_plans.txt
 ```
