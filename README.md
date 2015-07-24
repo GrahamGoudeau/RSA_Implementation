@@ -1,4 +1,4 @@
-# RSA Public-Key Cryptography Implementation
+# RSA Public-Key Cryptosystem
  An implementation of an RSA Public Key Cryptosystem as described [here](http://www.di-mgt.com.au/rsa_alg.html).  To generate primes and random filler bytes, the implementation takes advantage of `os.urandom`, which according to [the Python 2 documentation](https://docs.python.org/2/library/os.html#miscellaneous-functions) should be suitable for cryptographic applications.  In order to verify that a number is prime, `prime_gen.py` uses a [deterministic variant](https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test#Deterministic_variants_of_the_test) of the Miller-Rabin primality test.
 
 ### Key generation
