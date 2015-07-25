@@ -19,6 +19,8 @@ def key_gen(byte_len):
 	q = prime_gen.prime_gen(byte_len)
 
 	N = p * q
+
+    # L = phi(N) where phi is Euler's totient function
 	L = (p - 1) * (q - 1)
 
 	while True:
@@ -26,6 +28,8 @@ def key_gen(byte_len):
 		e = exponent_choices[exponent_choice]
 		if fractions.gcd(e, L) == 1: break
 
+    # x is the coefficient we are looking for
+    # x is e's inverse (mod L)
 	x, _, _ = xgcd(e, L)
 	d = x % L
 

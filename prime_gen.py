@@ -3,9 +3,6 @@ import os
 import sys
 import fractions
 
-OPT_KEY_LEN_BITS = 128
-OPT_KEY_LEN_BYTES = OPT_KEY_LEN_BITS / 8
-
 # generate a number representable in 'byte_len' number of bytes
 def number_gen(byte_len):
 	# suitable for cryptographic use according to https://docs.python.org/2/library/os.html#os.urandom
@@ -54,16 +51,7 @@ def is_prime(p):
 def prime_gen(byte_len):
 	p = number_gen(byte_len)
 
-	while not is_prime(p): 
+	while not is_prime(p):
 		p += 2
 
 	return p
-
-if __name__ == "__main__":
-	for index,i in enumerate(sys.argv):
-		if index == 0: continue
-		sys.argv[index] = int(i)
-
-	p = prime_gen(OPT_KEY_LEN_BYTES)
-	q = prime_gen(sys.argv[1])
-	print "confirmed prime: " + str(p)	

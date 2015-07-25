@@ -8,9 +8,6 @@ import math
 
 args = ['-k', '-e', '-d']
 
-def printf(string):
-    print(string, end="")
-
 def print_usage():
     print("Usage: [" + sys.argv[0] + "] [-option]")
     print("[-k] [# bits in the modulus N (power of two)] : generate a key of "
@@ -36,71 +33,6 @@ def print_key(N, e, d, bit_len):
         d_str = d_str[:-1]
     print(d_str)
     print("="*40)
-
-def encrypt(filename, N, e):
-    with open(filename, 'rb') as f:
-        contents = f.read()
-        length = len(contents)
-
-        # reserve two leftmost bits to ensure m < N
-        bits_take_amount = math.log(float(N), 2) - 2
-        # pad to a multiple of the number of bytes we take each time
-        add = 0
-        while (length + add) % bits_take_amount != 0:
-            contents += ('\0')
-            add += 1
-
-        length += add
-        # get the raw bits of the content
-        content_bits = ""
-        for i in xrange(length):
-            content_bits += bin(ord(contents[i]))[2:].zfill(8)
-
-        # if N=2^k, we encrypt every k-2 bits
-        counter = 0
-        output = ''
-        bit_string = ''
-        content_bits_length = len(content_bits)
-        for i in xrange(content_bits_length):
-            bit_string += content_bits[i]
-            counter += 1
-            if counter == bits_take_amount:
-                m = int('00' + bit_string, base=2)
-                counter = 0
-                bit_string = ''
-                output += bin(pow(m, e, N))[2:]
-
-        output_len = len(output)
-        counter = 0
-        output_byte = ''
-        for i in xrange(output_len):
-            output_byte += output[i]
-            counter += 1
-            # if the counter is at the end of a byte:
-            if counter == 7:
-                # print the actual encrypted byte
-                print(chr(int(output_byte, base=2)), end="")
-                output_byte = ''
-                counter = 0
-
-def get_raw_bits(f):
-    contents = f.read()
-    contents_length = len(contents)
-
-    for i in xrange(len(contents)): pass
-
-def true_encrypt(filename):
-    with open(filename, 'rb') as f:
-        contents = f.read()
-        for byte in contents:
-            print(chr((ord(byte) + 1) % 256), end="")
-
-def decrypt(filename):
-    with open(filename, 'rb') as f:
-        contents = f.read()
-        for byte in contents:
-            val = (ord(byte) - 1) % 256
-            print(chr(val), end="")
 
 def is_power_of_two(n):
     # n is of the form 10000...0 and n-1 is of the form 1111...1

@@ -4,10 +4,12 @@ import sys
 import math
 import prime_gen
 
+# generate 'length' number of nonzero bytes to comply with PKCS#1v1.5
 def generate_PS(length):
     byte_str = ""
     counter = 0
     while counter < length:
+        # should be a cryptographically secure source of random bytes
         new_byte = os.urandom(1)
         if new_byte == '\0': continue
 
@@ -52,8 +54,6 @@ def encrypt(N, e, filename):
                 # add each byte of EB to the binary string
                 new_bits = bin(ord(EB_byte))[2:].zfill(8)
                 bin_string += new_bits
-                # isn't this always 8?
-                #encrypted_binary_stream_len += len(new_bits)
 
             m_integer = int(bin_string, base=2)
             c = pow(m_integer, e, N)
@@ -61,6 +61,8 @@ def encrypt(N, e, filename):
 
         encrypted_binary_stream_len = len(encrypted_binary_stream)
         output_bytes = [encrypted_binary_stream[i:i + 8] for i in range(0, encrypted_binary_stream_len, 8)]
+
+        # print the encrypted bytes
         for byte in output_bytes:
             print(chr(int(byte, base=2)), end="")
 
@@ -101,20 +103,7 @@ def decrypt(N, d, filename):
 
             int_data_array.append(int(binary_string, base=2))
 
-        #print(int_data_array)
-        # decrypt each integer in the int data array
+        # decrypt and print each integer in the int data array
         for index,block in enumerate(int_data_array):
             m = pow(block, d, N)
-            #print(bin(m)[2:].zfill(N_bin_len))
             print_valid_bytes(m, N_bin_len)
-
-if __name__ == "__main__":
-    #print("N, e/d, filename, option")
-    N = int(sys.argv[1], base=16)
-    #print("N:", int(sys.argv[1], 16))
-    e = int(sys.argv[2], base=16)
-    #print("e:", sys.argv[2])
-    filename = sys.argv[3]
-    #print("filename:", sys.argv[3])
-    if sys.argv[4] == '-e': encrypt(N, e, filename)
-    if sys.argv[4] == '-d': decrypt(N, e, filename)
