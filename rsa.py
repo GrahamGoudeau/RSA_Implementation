@@ -3,7 +3,7 @@ import os
 import fractions
 import sys
 import key_gen
-import encrypt
+import algorithm
 import math
 
 args = ['-k', '-e', '-d']
@@ -12,11 +12,12 @@ def printf(string):
     print(string, end="")
 
 def print_usage():
-    print ("Usage: [" + sys.argv[0] + "] [-option]")
-    print ("[-k] [# bits in the modulus N (power of two)] : generate a key of "
+    print("Usage: [" + sys.argv[0] + "] [-option]")
+    print("[-k] [# bits in the modulus N (power of two)] : generate a key of "
             "the form (N = pq, e [public], d [private])")
-    print ("[-e] [filename] [N = pq] [e (public)]")
-    print ("[-d] [stuff]")
+    print("[-e] [N = pq] [e (public)] [filename to read from]")
+    print("[-d] [N = pq] [d (priate)] [filename to read from]")
+    print("Encrypted/decrypted bytes sent to stdout")
 
 def print_key(N, e, d, bit_len):
     print("="*40)
@@ -123,14 +124,18 @@ def main():
         if len(sys.argv) != 5:
             print_usage()
         else:
-            #encrypt(sys.argv[2], int(sys.argv[3]), int(sys.argv[4]))
-            true_encrypt(sys.argv[2])
+            N = int(sys.argv[2], base=16)
+            e = int(sys.argv[3], base=16)
+            filename = sys.argv[4]
+            algorithm.encrypt(N, e, filename)
     elif sys.argv[1] == '-d':
         if len(sys.argv) != 5:
             print_usage()
         else:
-            decrypt(sys.argv[2])
-    else: pass
+            N = int(sys.argv[2], base=16)
+            d = int(sys.argv[3], base=16)
+            filename = sys.argv[4]
+            algorithm.decrypt(N, d, filename)
 
 if __name__ == "__main__":
     main()
