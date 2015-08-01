@@ -47,7 +47,7 @@ To decrypt our sensitive data, we use the modulus and private exponent generated
 ```
 
 ### Download Integrity
-Current md5 hash of the tar file included above:
+To ensure the integrity of your cloned repo, you can Use check_hash.sh to get the md5 hash of your local files.  Compare to the current md5 hash of the source files:
 ```
 MD5 (rsa_implementation.tar.gz) = 290a0f1f0e4d2ff2ae6c6cb0f1e68b92
 ```
