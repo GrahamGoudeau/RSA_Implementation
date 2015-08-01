@@ -46,3 +46,10 @@ To decrypt our sensitive data, we use the modulus and private exponent generated
 ~/Documents/RSA_Implementation > python rsa.py -d ed6e5c6f3a6ba17c0df39421bca3753b0c347ac3f676a414bbf0ae523198d561 3b4c84e982bdbee72cd4d8fa5412bf043530ee1f9b4582443848aadfa977d401 encrypted_battle_plans.txt > unencrypted_battle_plans.txt
 ```
 
+### Download Integrity
+Current md5 hash of the directory:
+```
+~/Documents/RSA_Implementation > tar -c rsa.py key_gen.py prime_gen.py algorithm.py | gzip -n > rsa_implementation.tar.gz
+~/Documents/RSA_Implementation > md5 rsa_implementation.tar.gz
+MD5 (rsa_implementation.tar.gz) = 290a0f1f0e4d2ff2ae6c6cb0f1e68b92
+```
