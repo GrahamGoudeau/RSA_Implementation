@@ -47,9 +47,7 @@ To decrypt our sensitive data, we use the modulus and private exponent generated
 ```
 
 ### Download Integrity
-Current md5 hash of the directory:
+Current md5 hash of the tar file included above:
 ```
-~/Documents/RSA_Implementation > tar -c rsa.py key_gen.py prime_gen.py algorithm.py | gzip -n > rsa_implementation.tar.gz
-~/Documents/RSA_Implementation > md5 rsa_implementation.tar.gz
 MD5 (rsa_implementation.tar.gz) = 290a0f1f0e4d2ff2ae6c6cb0f1e68b92
 ```
